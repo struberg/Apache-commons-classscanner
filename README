@@ -1,0 +1,7 @@
+Apache commons ClassScanner implementation
+
+Aims to get rid of having tons of different applications
+doing their own classpath scanning for annotations over and over
+again.
+
+might also become a JSR, who knows ...
