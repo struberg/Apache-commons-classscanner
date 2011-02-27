@@ -16,9 +16,10 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.apache.commons.classscan.spi.test;
+package javax.enterprise.classscan.spi.test;
 
-import org.apache.commons.classscan.spi.ClassScanner;
+import javax.enterprise.classscan.ClassScanner;
+import javax.enterprise.classscan.ScanJob;
 
 import java.util.*;
 
@@ -28,10 +29,7 @@ import java.util.*;
 public class MockClassScanner extends ClassScanner {
 
     @Override
-    public void registerClient(String clientName, String[] markerFiles,
-                               String[] packageIncludes, String[] packageExcludes,
-                               boolean scanClassAnnotations, boolean scanMethodAnnotations,
-                               boolean scanFieldAnnotations, boolean scanParameterAnnotations) {
+    public void registerClient(String clientName, ScanJob job) {
         registeredClients.add(clientName);
     }
 

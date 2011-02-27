@@ -18,7 +18,7 @@
 */
 package org.apache.commons.classscan.spi.test;
 
-import org.apache.commons.classscan.spi.ClassScanner;
+import javax.enterprise.classscan.ClassScanner;
 import org.junit.Assert;
 import org.junit.Test;
 

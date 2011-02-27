@@ -1,7 +1,11 @@
-Apache commons ClassScanner implementation
+Commons ClassScanner JSR proposal implementation
 
-Aims to get rid of having tons of different applications
+This JSR proposal aims to get rid of having tons of different applications
 doing their own classpath scanning for annotations over and over
 again.
 
-might also become a JSR, who knows ...
+It did not get submitted, but I'm already using the javax.enterprise packge.
+
+DO NOT use this package in production since it is NOT officially specced!
+
+All information and sources are released under Apache License v2.0

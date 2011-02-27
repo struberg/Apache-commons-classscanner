@@ -115,6 +115,7 @@
         <module>classscan-api</module>
         <module>classscan-tck</module>
         <module>classscan-xbean</module>
+        <module>classscan-owb</module>
     </modules>
 
     <build>

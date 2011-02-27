@@ -16,7 +16,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.apache.commons.classscan.spi;
+package javax.enterprise.classscan;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -39,7 +39,10 @@ import java.util.Set;
  */
 public abstract class ClassScanner {
 
-    public final static String[] DEFAULT_IGNORED_PACKAGES = {"javax", "java", "sun", "com.sun", "javassist"};
+    /**
+     * Those packages should get excluded in all ClassScanner implementations
+     */
+    public final static String[] DEFAULT_IGNORED_PACKAGES = {"javax", "java", "sun", "com.sun"};
 
     /**
      * Access the registered ClassScanner implementation.
@@ -66,30 +69,19 @@ public abstract class ClassScanner {
 
 
     /**
-     * This method typically gets called from the {@link ClassScanClient#invokeRegistration(ClassScanner)}
+     * This method typically gets called from the {@link javax.enterprise.classscan.ClassScanClient#invokeRegistration(ClassScanner)}
      * method to tell the scanner which patterns must be scanned for
      *
-     * @param clientName the {@link ClassScanClient} identifies itself via this name. e.g. 'org.apache.myfaces'
+     * @param clientName the {@link javax.enterprise.classscan.ClassScanClient} identifies itself via this name. e.g. 'org.apache.myfaces'
      *        or 'org.apache.openwebbeans'
-     * @param markerFiles optional array of marker file names, e.g. 'META-INF/beans.xml'. If this parameter is non-null
-     *        then jars will only get scanned
-     * @param packageIncludes
-     * @param packageExcludes
-     * @param scanClassAnnotations
-     * @param scanMethodAnnotations
-     * @param scanFieldAnnotations
-     * @param scanParameterAnnotations
+     *
      */
-    public abstract void registerClient(String clientName, String[] markerFiles,
-                                       String[] packageIncludes, String[] packageExcludes,
-                                       boolean scanClassAnnotations, boolean scanMethodAnnotations,
-                                       boolean scanFieldAnnotations, boolean scanParameterAnnotations);
+    public abstract void registerClient(String clientName, ScanJob job);
 
     /**
      * This method should get called once a client doesn't need any information from the ClassScanner anymore.
      *
-     * @param clientName the name as used in
-     *        {@link #registerClient(String, String[], String[], String[], boolean, boolean, boolean, boolean)
+     * @param clientName the name as used in {@link #registerClient(String, ScanJob)
      */
     public abstract void deregisterClient(String clientName);
 

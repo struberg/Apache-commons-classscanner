@@ -16,9 +16,10 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.apache.commons.classscan.spi.test;
+package javax.enterprise.classscan.spi.test;
 
-import org.apache.commons.classscan.spi.ClassScanner;
+import javax.enterprise.classscan.ClassScanner;
+
 import org.junit.Assert;
 import org.junit.Test;
 

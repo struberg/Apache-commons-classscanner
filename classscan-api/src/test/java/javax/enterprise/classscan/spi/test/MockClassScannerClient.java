@@ -16,10 +16,11 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.apache.commons.classscan.spi.test;
+package javax.enterprise.classscan.spi.test;
 
-import org.apache.commons.classscan.spi.ClassScanClient;
-import org.apache.commons.classscan.spi.ClassScanner;
+import javax.enterprise.classscan.ClassScanClient;
+import javax.enterprise.classscan.ClassScanner;
+import javax.enterprise.classscan.ScanJob;
 
 /**
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
@@ -30,7 +31,8 @@ public class MockClassScannerClient implements ClassScanClient {
 
     @Override
     public void invokeRegistration(ClassScanner scanner) {
-        scanner.registerClient(NAME, null, null, null,
-                               true, true, true, true);
+        scanner.registerClient(NAME,
+                               new ScanJob(null, null, null,
+                                           true, true, true, true));
     }
 }
