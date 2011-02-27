@@ -119,6 +119,14 @@
     </modules>
 
     <build>
+        <resources>
+            <resource>
+                <!-- override the silly settings of commons-parent -->
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
