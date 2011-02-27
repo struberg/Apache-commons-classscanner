@@ -183,7 +183,7 @@ public class OwbClassScanner extends ClassScanner {
 
         if (loader == null)
         {
-            loader = ClassScanner.class.getClassLoader();
+            loader = OwbClassScanner.class.getClassLoader();
         }
 
         return loader;
