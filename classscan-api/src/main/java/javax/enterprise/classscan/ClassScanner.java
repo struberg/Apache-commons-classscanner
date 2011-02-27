@@ -22,7 +22,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>SPI of the ClassScanner itself.</p>
@@ -45,6 +44,8 @@ public abstract class ClassScanner {
      */
     public final static String[] DEFAULT_IGNORED_PACKAGES = {"javax", "java", "sun", "com.sun"};
 
+    private volatile static ClassScanner classScanner;
+
     /**
      * Access the registered ClassScanner implementation.
      * This is a 'highlander method' means, there must only be one of them ...
@@ -56,17 +57,19 @@ public abstract class ClassScanner {
      * @return the ClassScanner singleton implementation for this ClassLoader
      */
     public final static ClassScanner getInstance() {
-        ServiceLoader<ClassScanner> sl = ServiceLoader.load(ClassScanner.class);
-        Iterator<ClassScanner> it = sl.iterator();
-        if (!it.hasNext()) {
-            throw new RuntimeException("No ClassScanner available!");
-        }
-        ClassScanner instance = it.next();
-        if (it.hasNext()) {
-            throw new RuntimeException("Ambiguous ClassScanner found!");
+        if (classScanner == null) {
+            ServiceLoader<ClassScanner> sl = ServiceLoader.load(ClassScanner.class);
+            Iterator<ClassScanner> it = sl.iterator();
+            if (!it.hasNext()) {
+                throw new RuntimeException("No ClassScanner available!");
+            }
+            classScanner = it.next();
+            if (it.hasNext()) {
+                throw new RuntimeException("Ambiguous ClassScanner found!");
+            }
         }
 
-        return instance;
+        return classScanner;
     }
 
     /**
@@ -85,6 +88,14 @@ public abstract class ClassScanner {
      * @param clientName the name as used in {@link #registerClient(String, ScanJob)
      */
     public abstract void deregisterClient(String clientName);
+
+    /**
+     * This method allows to veto a known {@link ClassScanClient}.
+     * This is very handy in cases of unit tests and the likes.
+     *
+     * @param clientName to veto
+     */
+    public abstract void vetoClient(String clientName);
 
     /**
      * @return a Map keyed by the fully qualified string name of a annotation class.  The Set returned is

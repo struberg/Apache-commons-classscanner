@@ -36,6 +36,9 @@ public class OwbClassScanner extends ClassScanner {
 
     private Map<ClassLoader, ScanResult> scanResultMap = new ConcurrentHashMap<ClassLoader, ScanResult>();
 
+    private Set<String> vetoedClients = new HashSet<String>();
+
+
     /**
      * This method initializes all {@link ClassScanClient}s.
      * It will get called lazily at the first time the scanning result
@@ -95,6 +98,11 @@ public class OwbClassScanner extends ClassScanner {
     }
 
     @Override
+    public void vetoClient(String clientName) {
+        vetoedClients.add(clientName);
+    }
+
+    @Override
     public Map<String, Set<String>> getClassesIndex(String clientName) {
         AnnotationDB annotationDB = getAnnotationDb(clientName);
         if (annotationDB != null) {
@@ -102,6 +110,22 @@ public class OwbClassScanner extends ClassScanner {
         }
         return null;
     }
+
+    /**
+     * @return the ClassLoader to use.
+     */
+    protected ClassLoader getClassLoader()
+    {
+        ClassLoader loader =  Thread.currentThread().getContextClassLoader();
+
+        if (loader == null)
+        {
+            loader = OwbClassScanner.class.getClassLoader();
+        }
+
+        return loader;
+    }
+
 
     /**
      * This method will lazily trigger the classpath scanning the first
@@ -122,6 +146,11 @@ public class OwbClassScanner extends ClassScanner {
         AnnotationDB annotationDB = scanResult.getAnnotationDB();
         if (annotationDB == null) {
             annotationDB = new AnnotationDB();
+
+            // drop vetoed clients
+            for (String vetoedClient : vetoedClients) {
+                scanResult.getScanJobs().remove(vetoedClient);
+            }
 
             // if requested by a single client, then we perform the respective task
             boolean scanClassAnnotations = false;
@@ -180,21 +209,6 @@ public class OwbClassScanner extends ClassScanner {
             scanResult.setAnnotationDB(annotationDB);
         }
         return annotationDB;
-    }
-
-    /**
-     * @return the ClassLoader to use.
-     */
-    protected ClassLoader getClassLoader()
-    {
-        ClassLoader loader =  Thread.currentThread().getContextClassLoader();
-
-        if (loader == null)
-        {
-            loader = OwbClassScanner.class.getClassLoader();
-        }
-
-        return loader;
     }
 
     /**

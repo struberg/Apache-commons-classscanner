@@ -39,6 +39,11 @@ public class MockClassScanner extends ClassScanner {
     }
 
     @Override
+    public void vetoClient(String clientName) {
+
+    }
+
+    @Override
     public Map<String, Set<String>> getAnnotationsIndex(String clientName) {
         return null;
     }
