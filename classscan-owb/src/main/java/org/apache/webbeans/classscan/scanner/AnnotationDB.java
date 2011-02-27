@@ -19,6 +19,7 @@
 package org.apache.webbeans.classscan.scanner;
 
 
+import javassist.ClassPool;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.FieldInfo;
@@ -70,6 +71,17 @@ public class AnnotationDB implements Serializable
     protected boolean scanParameterAnnotations = true;
     protected boolean scanFieldAnnotations = true;
     protected String[] ignoredPackages = {"javax", "java", "sun", "com.sun", "javassist"};
+
+    public void scanClasses(Set<Class<?>> classesToScan) {
+        try {
+            for (Class<?> cls : classesToScan) {
+                URL url = ClassPool.getDefault().find(cls.getName());
+                scanClass(url.openStream());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public class CrossReferenceException extends Exception
     {

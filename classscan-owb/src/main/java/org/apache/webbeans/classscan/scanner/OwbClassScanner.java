@@ -61,7 +61,7 @@ public class OwbClassScanner extends ClassScanner {
 
     @Override
     public synchronized void registerClient(String clientName, ScanJob scanJob) {
-        ClassLoader loader = getContextClassLoader();
+        ClassLoader loader = getClassLoader();
         ScanResult scanResult = scanResultMap.get(loader);
         if (scanResult == null) {
             scanResult = new ScanResult();
@@ -73,7 +73,7 @@ public class OwbClassScanner extends ClassScanner {
 
     @Override
     public void deregisterClient(String clientName) {
-        ClassLoader loader = getContextClassLoader();
+        ClassLoader loader = getClassLoader();
 
         ScanResult scanResult = scanResultMap.get(loader);
         if (scanResult != null) {
@@ -95,8 +95,14 @@ public class OwbClassScanner extends ClassScanner {
         return getAnnotationDb(clientName).getClassIndex();
     }
 
+    /**
+     * This method will lazily trigger the classpath scanning the first
+     * time it creates the AnnotationDB.
+     * @param clientName
+     * @return the AnnotationDB after a successful scan
+     */
     private AnnotationDB getAnnotationDb(String clientName) {
-        ClassLoader loader = getContextClassLoader();
+        ClassLoader loader = getClassLoader();
 
         ScanResult scanResult = scanResultMap.get(loader);
         if (scanResult == null) {
@@ -115,6 +121,8 @@ public class OwbClassScanner extends ClassScanner {
             boolean scanFieldAnnotations = false;
             boolean scanParameterAnnotations = false;
 
+            Set<Class<?>> classesToScan = new HashSet<Class<?>>();
+
             // create filters
             Set<String> urlPaths = new HashSet<String>();
             for (ScanJob scanJob : scanResult.getScanJobs().values()) {
@@ -123,6 +131,11 @@ public class OwbClassScanner extends ClassScanner {
                 scanMethodAnnotations |= scanJob.isScanMethodAnnotations();
                 scanFieldAnnotations |= scanJob.isScanFieldAnnotations();
                 scanParameterAnnotations |= scanJob.isScanParameterAnnotations();
+                if (scanJob.getClassesToScan() != null) {
+                    for (Class<?> classToScan : scanJob.getClassesToScan()) {
+                        classesToScan.add(classToScan);
+                    }
+                }
 
                 String[] markerFiles = scanJob.getMarkerFiles();
                 if ( markerFiles != null && markerFiles.length > 0 ) {
@@ -145,7 +158,13 @@ public class OwbClassScanner extends ClassScanner {
                 annotationDB.setScanFieldAnnotations(scanFieldAnnotations);
                 annotationDB.setScanParameterAnnotations(scanParameterAnnotations);
 
-                annotationDB.scanArchives(urlPaths.toArray(new String[urlPaths.size()]));
+                if (!urlPaths.isEmpty()) {
+                    annotationDB.scanArchives(urlPaths.toArray(new String[urlPaths.size()]));
+                }
+
+                if (!classesToScan.isEmpty()) {
+                    annotationDB.scanClasses(classesToScan);
+                }
             } catch (IOException e) {
                 throw new RuntimeException("Error in classpath scanning", e);
             }
@@ -155,13 +174,16 @@ public class OwbClassScanner extends ClassScanner {
         return annotationDB;
     }
 
-    public ClassLoader getContextClassLoader()
+    /**
+     * @return the ClassLoader to use.
+     */
+    protected ClassLoader getClassLoader()
     {
         ClassLoader loader =  Thread.currentThread().getContextClassLoader();
 
         if (loader == null)
         {
-            loader = OwbClassScanner.class.getClassLoader();
+            loader = ClassScanner.class.getClassLoader();
         }
 
         return loader;

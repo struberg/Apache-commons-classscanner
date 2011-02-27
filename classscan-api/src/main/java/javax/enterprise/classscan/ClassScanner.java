@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>SPI of the ClassScanner itself.</p>
@@ -49,6 +50,9 @@ public abstract class ClassScanner {
      * This is a 'highlander method' means, there must only be one of them ...
      * (of course 1 for each ContextClassLoader to be more precious).
      *
+     * TODO this method might get better defined in respect to ContextClassLoader
+     * TODO review if the ServiceLoader caching mechanism works well enough for our situation
+     *
      * @return the ClassScanner singleton implementation for this ClassLoader
      */
     public final static ClassScanner getInstance() {
@@ -64,9 +68,6 @@ public abstract class ClassScanner {
 
         return instance;
     }
-
-
-
 
     /**
      * This method typically gets called from the {@link javax.enterprise.classscan.ClassScanClient#invokeRegistration(ClassScanner)}

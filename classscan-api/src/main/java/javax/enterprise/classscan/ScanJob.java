@@ -34,6 +34,7 @@ public class ScanJob {
     private boolean scanMethodAnnotations;
     private boolean scanFieldAnnotations;
     private boolean scanParameterAnnotations;
+    private Class<?>[] classesToScan;
 
     /**
      * public ct
@@ -57,6 +58,17 @@ public class ScanJob {
         this.scanMethodAnnotations = scanMethodAnnotations;
         this.scanFieldAnnotations = scanFieldAnnotations;
         this.scanParameterAnnotations = scanParameterAnnotations;
+    }
+
+    /**
+     * If this method is used, ClassScanner will pares those classes
+     * explicitly.
+     * This is pretty handy for unit tests and other situations
+     * where only single classes need to get scanned.
+     * @param classesToScan
+     */
+    public void setClassesToScan(Class<?>[] classesToScan) {
+        this.classesToScan = classesToScan;
     }
 
     public String[] getMarkerFiles() {
@@ -85,5 +97,9 @@ public class ScanJob {
 
     public boolean isScanParameterAnnotations() {
         return scanParameterAnnotations;
+    }
+
+    public Class<?>[] getClassesToScan() {
+        return classesToScan;
     }
 }
