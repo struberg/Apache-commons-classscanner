@@ -87,12 +87,20 @@ public class OwbClassScanner extends ClassScanner {
 
     @Override
     public Map<String, Set<String>> getAnnotationsIndex(String clientName) {
-        return getAnnotationDb(clientName).getAnnotationIndex();
+        AnnotationDB annotationDB = getAnnotationDb(clientName);
+        if (annotationDB != null) {
+            return annotationDB.getAnnotationIndex();
+        }
+        return null;
     }
 
     @Override
     public Map<String, Set<String>> getClassesIndex(String clientName) {
-        return getAnnotationDb(clientName).getClassIndex();
+        AnnotationDB annotationDB = getAnnotationDb(clientName);
+        if (annotationDB != null) {
+            return annotationDB.getClassIndex();
+        }
+        return null;
     }
 
     /**
