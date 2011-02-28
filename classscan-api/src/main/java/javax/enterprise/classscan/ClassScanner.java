@@ -47,12 +47,15 @@ public abstract class ClassScanner {
     private volatile static ClassScanner classScanner;
 
     /**
-     * Access the registered ClassScanner implementation.
+     * <p>Access the registered ClassScanner implementation.
      * This is a 'highlander method' means, there must only be one of them ...
-     * (of course 1 for each ContextClassLoader to be more precious).
+     * (of course 1 for each ContextClassLoader to be more precious).</p>
      *
-     * TODO this method might get better defined in respect to ContextClassLoader
-     * TODO review if the ServiceLoader caching mechanism works well enough for our situation
+     * <h3>Note</h3>
+     * <p>This method might get better defined in respect to ContextClassLoader by the implementing
+     * container. The content of this API method might differ. It just must be sure
+     * that a certain ClassLoader based request (e.g. from a WebApp) always returns the
+     * same instance.</p>
      *
      * @return the ClassScanner singleton implementation for this ClassLoader
      */
@@ -92,6 +95,7 @@ public abstract class ClassScanner {
     /**
      * This method allows to veto a known {@link ClassScanClient}.
      * This is very handy in cases of unit tests and the likes.
+     * It is <b>not</b> suggested to use this method in productive code!
      *
      * @param clientName to veto
      */
