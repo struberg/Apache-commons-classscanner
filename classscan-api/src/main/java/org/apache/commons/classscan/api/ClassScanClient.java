@@ -16,7 +16,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package javax.enterprise.classscan;
+package org.apache.commons.classscan.api;
 
 /**
  * <p>This SPI is for all clients of the ClassScanner.

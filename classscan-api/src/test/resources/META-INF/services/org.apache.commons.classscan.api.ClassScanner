@@ -18,4 +18,4 @@
 ##############################################################
 
 # test ClassScanner
-javax.enterprise.classscan.spi.test.MockClassScanner
+org.apache.commons.classscan.api.test.MockClassScanner

@@ -16,10 +16,10 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package javax.enterprise.classscan;
+package org.apache.commons.classscan.api;
 
 /**
- * Classpath scanning job from a single {@link javax.enterprise.classscan.ClassScanClient}.
+ * Classpath scanning job from a single {@link ClassScanClient}.
  * This is basically a filter which restricts the amount of classes
  * which should be scanned to speedup the scanning.
  *

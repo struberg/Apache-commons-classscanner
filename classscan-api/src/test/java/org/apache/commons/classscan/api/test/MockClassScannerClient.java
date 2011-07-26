@@ -16,11 +16,12 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package javax.enterprise.classscan.spi.test;
+package org.apache.commons.classscan.api.test;
 
-import javax.enterprise.classscan.ClassScanClient;
-import javax.enterprise.classscan.ClassScanner;
-import javax.enterprise.classscan.ScanJob;
+
+import org.apache.commons.classscan.api.ClassScanClient;
+import org.apache.commons.classscan.api.ClassScanner;
+import org.apache.commons.classscan.api.ScanJob;
 
 /**
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
